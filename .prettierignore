@@ -1,0 +1,6 @@
+dist
+node_modules
+package-lock.json
+auto-imports.d.ts
+components.d.ts
+.claude

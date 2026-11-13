@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies and build output
+node_modules/
+dist/
+dist-ssr/
+coverage/
+.vite/
+.cache/
+*.tsbuildinfo
+
+# Local environment settings (keep the shared template)
+.env
+.env.*
+!.env.example
+*.local
+
+# Local tool settings
+.claude/settings.local.json
+.claude/worktrees/
+
+# Generated integration reports
+/docs/frontend-integration-results.json
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local deployment secrets
+/.env
