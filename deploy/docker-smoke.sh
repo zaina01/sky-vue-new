@@ -14,7 +14,8 @@ cleanup() {
   exit "$result"
 }
 trap cleanup EXIT
-docker network create "$prefix" >/dev/null
+# Docker versions on hosted runners require an explicit subnet for --ip below.
+docker network create --subnet "10.254.$((RANDOM % 256)).0/24" "$prefix" >/dev/null
 start_backend() {
   docker run -d --name "$prefix-backend" --network "$prefix" --network-alias backend \
     -e "MARKER=$1" \
@@ -26,7 +27,8 @@ docker run --rm --entrypoint nginx "$image" -v
 docker run -d --name "$prefix-web" --network "$prefix" -p 127.0.0.1::80 "$image" >/dev/null
 port=$(docker port "$prefix-web" 80/tcp | head -n 1 | awk -F: '{print $NF}')
 base="http://127.0.0.1:$port"
-curl --retry 30 --retry-connrefused --retry-delay 1 --fail "$base/healthz"
+curl --retry 30 --retry-all-errors --retry-delay 1 --retry-max-time 45 \
+  --connect-timeout 2 --max-time 5 --fail "$base/healthz"
 curl --fail "$base/" | grep -q '<div id="app">'
 curl --fail "$base/jobs/123" | grep -q '<div id="app">'
 curl --retry 30 --retry-all-errors --retry-delay 1 --fail "$base/api/check?keep=1" | grep -q 'first /api/check?keep=1'
